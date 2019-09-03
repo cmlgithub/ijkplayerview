@@ -341,6 +341,10 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
             // 禁止翻转
             mOrientationListener.disable();
         }
+
+        if(mVideoView != null){
+            mVideoView.isNoVoice = isNoVoice;
+        }
     }
 
     @Override
@@ -459,6 +463,13 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
      * @return
      */
     public IjkPlayerView init() {
+        isNoVoice = false;
+        _initMediaPlayer();
+        return this;
+    }
+    private boolean isNoVoice;
+    public IjkPlayerView initNoVoice() {
+        isNoVoice = true;
         _initMediaPlayer();
         return this;
     }
@@ -2160,12 +2171,18 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
     //------------cml add--------------
 
     public IjkPlayerView setVideoAspectRatio(int aspect){
-        mVideoView.setAspectRatio(aspect);
+        if(mVideoView != null)
+            mVideoView.setAspectRatio(aspect);
         return this;
     }
 
-    public void setNoVoice(){
-        mVideoView.mMediaPlayer.setVolume(0f,0f);
+    public IjkPlayerView setNoVoice(){
+        if(mVideoView != null && mVideoView.getUri() != null){
+            mVideoView.mMediaPlayer.setVolume(0f,0f);
+        }else {
+            throw new NullPointerException("Please Set the path first ==> call setVideoPath()");
+        }
+        return this;
     }
     public void resumeVoice(){
         mVideoView.mMediaPlayer.setVolume(1f,1f);

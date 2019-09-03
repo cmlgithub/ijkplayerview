@@ -20,12 +20,9 @@ public class MainActivity extends AppCompatActivity {
 
         ijkPlayerView = findViewById(R.id.ijkPlayerView);
         ijkPlayerView
-                .init()
-//                .setVideoAspectRatio(IRenderView.AR_ASPECT_FILL_PARENT)
+                .initNoVoice()
                 .setVideoPath(path)
-                .setMediaQuality(IjkPlayerView.MEDIA_QUALITY_HIGH)
                 .start();
-
 
     }
 

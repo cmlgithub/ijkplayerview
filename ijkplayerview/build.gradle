@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 28
@@ -37,11 +38,11 @@ dependencies {
 
 }
 
-//publish {
-//    userOrg = 'mingliang'//bintray.com用户名
-//    groupId = 'com.cml'//jcenter上的路径
-//    artifactId = 'ijkplayerview'//项目名称
-//    publishVersion = '1.0.0'//版本号
-//    desc = 'ijkplayerview'//描述，不重要
-//    website = 'https://github.com/cmlgithub/ijkplayerview'
-//}
+publish {
+    userOrg = 'mingliang'//bintray.com用户名
+    groupId = 'com.cml'//jcenter上的路径
+    artifactId = 'ijkplayerview'//项目名称
+    publishVersion = '1.0.1'//版本号
+    desc = 'ijkplayerview'//描述，不重要
+    website = 'https://github.com/cmlgithub/ijkplayerview'
+}

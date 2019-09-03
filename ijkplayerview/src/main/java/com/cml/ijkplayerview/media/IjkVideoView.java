@@ -84,7 +84,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     private boolean mCanPause = true;
     private boolean mCanSeekBack = true;
     private boolean mCanSeekForward = true;
-    private boolean mIsUsingMediaCodec;
+    private boolean mIsUsingMediaCodec = true;
     private boolean mIsUsingMediaCodecAutoRotate;
     private boolean mIsMediaCodecHandleResolutionChange;
     private boolean mIsUsingOpenSLES;
@@ -120,6 +120,8 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
     private long mSeekStartTime = 0;
     private long mSeekEndTime = 0;
+
+    public boolean isNoVoice;
 
     public IjkVideoView(Context context) {
         super(context);
@@ -472,6 +474,12 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             mMediaPlayer.setScreenOnWhilePlaying(true);
             mPrepareStartTime = System.currentTimeMillis();
             mMediaPlayer.prepareAsync();
+
+            if(isNoVoice){
+                mMediaPlayer.setVolume(0f,0f);
+            }else {
+                mMediaPlayer.setVolume(1f,1f);
+            }
 
             // REMOVED: mPendingSubtitleTracks
 
@@ -1142,7 +1150,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                     } else {
                         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", mPixelFormat);
                     }
-                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 5);
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
 
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
