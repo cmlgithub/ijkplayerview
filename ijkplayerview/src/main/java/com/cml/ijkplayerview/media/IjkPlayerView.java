@@ -344,6 +344,13 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
 
         if(mVideoView != null){
             mVideoView.isNoVoice = isNoVoice;
+            if(isNoVoice){
+                mFlVideoBox.setFocusable(false);
+                mFlVideoBox.setFocusableInTouchMode(false);
+            }else {
+                mFlVideoBox.setFocusable(true);
+                mFlVideoBox.setFocusableInTouchMode(true);
+            }
         }
     }
 
@@ -1231,7 +1238,7 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if(true){
+            if(isNoVoice){
                 return false;
             }
             switch (MotionEventCompat.getActionMasked(event)) {
@@ -2177,14 +2184,15 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
     }
 
     public IjkPlayerView setNoVoice(){
-        if(mVideoView != null && mVideoView.getUri() != null){
+        if(mVideoView != null && mVideoView.mMediaPlayer != null){
             mVideoView.mMediaPlayer.setVolume(0f,0f);
-        }else {
-            throw new NullPointerException("Please Set the path first ==> call setVideoPath()");
         }
         return this;
     }
     public void resumeVoice(){
-        mVideoView.mMediaPlayer.setVolume(1f,1f);
+        if(mVideoView != null && mVideoView.mMediaPlayer != null){
+            mVideoView.mMediaPlayer.setVolume(1f,1f);
+        }
     }
+
 }

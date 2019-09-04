@@ -1,6 +1,7 @@
 package com.cml.ijkplayerview_library;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -20,9 +21,26 @@ public class MainActivity extends AppCompatActivity {
 
         ijkPlayerView = findViewById(R.id.ijkPlayerView);
         ijkPlayerView
-                .initNoVoice()
+                .init()
                 .setVideoPath(path)
                 .start();
+
+
+        ijkPlayerView.seekTo(17901);
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true){
+//                    try {
+//                        Thread.sleep(5000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    Log.e("Cml","current Postion = " + ijkPlayerView.getCurPosition());
+//                }
+//            }
+//        }).start();
 
     }
 

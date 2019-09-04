@@ -476,8 +476,12 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             mMediaPlayer.prepareAsync();
 
             if(isNoVoice){
+                setFocusable(false);
+                setFocusableInTouchMode(false);
                 mMediaPlayer.setVolume(0f,0f);
             }else {
+                setFocusable(true);
+                setFocusableInTouchMode(true);
                 mMediaPlayer.setVolume(1f,1f);
             }
 
