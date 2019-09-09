@@ -92,6 +92,10 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
     private static final int MSG_ENABLE_ORIENTATION = 10087;
     // 尝试重连消息
     private static final int MSG_TRY_RELOAD = 10088;
+    //延时消失控制条时间
+    private static final int MSG_DISMISS_ = 10100;
+    private static final int MSG_DISMISS_TIME = 3000;
+
     // 无效变量
     private static final int INVALID_VALUE = -1;
     // 达到文件时长的允许误差值，用来判断是否播放完成
@@ -152,13 +156,16 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            Log.e("Cml","handleMessage:"+msg.what);
             if (msg.what == MSG_UPDATE_SEEK) {
                 final int pos = _setProgress();
-                if (!mIsSeeking && mIsShowBar && mVideoView.isPlaying()) {
+//                if (!mIsSeeking && mIsShowBar && mVideoView.isPlaying()) {
                     // 这里会重复发送MSG，已达到实时更新 Seek 的效果
                     msg = obtainMessage(MSG_UPDATE_SEEK);
-                    sendMessageDelayed(msg, 1000 - (pos % 1000));
-                }
+                    mHandler.removeMessages(MSG_UPDATE_SEEK);
+                    sendMessageDelayed(msg, 200);
+//                    sendMessageDelayed(msg, 1000 - (pos % 1000));
+//                }
             } else if (msg.what == MSG_ENABLE_ORIENTATION) {
                 if (mOrientationListener != null) {
                     mOrientationListener.enable();
@@ -169,6 +176,9 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
                 }
                 msg = obtainMessage(MSG_TRY_RELOAD);
                 sendMessageDelayed(msg, 3000);
+            } else if(msg.what == MSG_DISMISS_){
+                mLlBottomBar.setVisibility(GONE);
+                mHandler.removeMessages(MSG_UPDATE_SEEK);
             }
         }
     };
@@ -236,7 +246,7 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
         _initView(context);
     }
 
-    private void _initView(Context context) {
+    private void _initView(final Context context) {
         if (context instanceof AppCompatActivity) {
             mAttachActivity = (AppCompatActivity) context;
         } else {
@@ -301,6 +311,7 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
         mTvReload.setOnClickListener(this);
     }
 
+    private long lastProgressTime = 0 ;
     /**
      * 初始化
      */
@@ -350,6 +361,49 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
             }else {
                 mFlVideoBox.setFocusable(true);
                 mFlVideoBox.setFocusableInTouchMode(true);
+
+                mVideoView.setOnKeyListener(new OnKeyListener() {
+                    @Override
+                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+
+                        if(System.currentTimeMillis() - lastProgressTime < 300){
+                            return true;
+                        }
+                        lastProgressTime = System.currentTimeMillis();
+
+                        if(mLlBottomBar.getVisibility() == View.GONE){
+                            mLlBottomBar.setVisibility(View.VISIBLE);
+                            mHandler.sendEmptyMessage(MSG_UPDATE_SEEK);
+                            mHandler.sendEmptyMessageDelayed(MSG_DISMISS_,MSG_DISMISS_TIME);
+                            return true;
+                        }
+
+                        mHandler.removeMessages(MSG_DISMISS_);
+                        mHandler.sendEmptyMessageDelayed(MSG_DISMISS_,MSG_DISMISS_TIME);
+
+                        if(mVideoView != null && mVideoView.mMediaPlayer != null){
+
+                            if(keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT){
+                                long seekToPosition = mVideoView.mMediaPlayer.getCurrentPosition() - 1000 * 10;
+                                if(seekToPosition > 0 ){
+                                    mVideoView.mMediaPlayer.seekTo(seekToPosition);
+                                    return true;
+                                }
+                            }else if(keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT){
+                                long seekToPosition = mVideoView.mMediaPlayer.getCurrentPosition() + 1000 * 10;
+                                if(seekToPosition < mVideoView.mMediaPlayer.getDuration()){
+                                    mVideoView.mMediaPlayer.seekTo(seekToPosition);
+                                    return true;
+                                }
+                            }else if(keyEvent.getKeyCode() == 23){
+                                _togglePlayStatus();
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    }
+                });
             }
         }
     }
@@ -625,6 +679,7 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
      * 暂停
      */
     public void pause() {
+        mHandler.removeMessages(MSG_UPDATE_SEEK);
         mIvPlay.setSelected(false);
         if (mVideoView.isPlaying()) {
             mVideoView.pause();
@@ -765,7 +820,8 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
                     mTvRecoverScreen.setVisibility(isShowBar ? View.VISIBLE : View.GONE);
                 }
             } else {
-                mWindowTopBar.setVisibility(isShowBar ? View.VISIBLE : View.GONE);
+                mWindowTopBar.setVisibility(View.GONE);
+//                mWindowTopBar.setVisibility(isShowBar ? View.VISIBLE : View.GONE);
                 mFullscreenTopBar.setVisibility(View.GONE);
                 mIvPlayerLock.setVisibility(View.GONE);
                 if (mIsNeedRecoverScreen) {

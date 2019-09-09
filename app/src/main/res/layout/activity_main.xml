@@ -11,35 +11,8 @@
         android:background="@color/colorPrimary"
         android:id="@+id/ijkPlayerView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="match_parent"/>
 
 
-    <Button
-        android:text="noVoice"
-        android:onClick="noVoice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:text="haveVoice"
-        android:layout_alignParentRight="true"
-        android:onClick="haveVoice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:onClick="fullScreen"
-        android:text="fullScreen"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:layout_alignParentRight="true"
-        android:onClick="normalScreen"
-        android:text="normalScreen"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 </RelativeLayout>

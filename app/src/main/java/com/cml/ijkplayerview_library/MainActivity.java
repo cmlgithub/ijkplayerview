@@ -1,7 +1,9 @@
 package com.cml.ijkplayerview_library;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -11,7 +13,8 @@ import com.cml.ijkplayerview.media.IjkPlayerView;
 
 public class MainActivity extends AppCompatActivity {
 
-    String path = "http://114.118.13.13:8080/materials/ALL/eac83f2b9058b78c296cac57c3fa4d9c.mp4";
+    String path = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+//    String path = "http://114.118.13.13:8080/materials/ALL/eac83f2b9058b78c296cac57c3fa4d9c.mp4";
     private IjkPlayerView ijkPlayerView;
 
     @Override
@@ -22,11 +25,13 @@ public class MainActivity extends AppCompatActivity {
         ijkPlayerView = findViewById(R.id.ijkPlayerView);
         ijkPlayerView
                 .init()
+//                .setVideoAspectRatio(IRenderView.AR_ASPECT_FILL_PARENT)
                 .setVideoPath(path)
+//                .setVideoPath(Environment.getExternalStorageDirectory().getAbsolutePath()+"/ad.ts")
                 .start();
 
 
-        ijkPlayerView.seekTo(17901);
+
 
 //        new Thread(new Runnable() {
 //            @Override
@@ -37,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 //                    } catch (InterruptedException e) {
 //                        e.printStackTrace();
 //                    }
-//                    Log.e("Cml","current Postion = " + ijkPlayerView.getCurPosition());
+//                    Log.e("Cml",MainActivity.this.getWindow().getDecorView().findFocus().toString());
 //                }
 //            }
 //        }).start();

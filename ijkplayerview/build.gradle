@@ -13,6 +13,12 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        sourceSets {
+            main{
+                jniLibs.srcDirs = ['libs']
+            }
+        }
+
     }
 
     buildTypes {
@@ -37,7 +43,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     api 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
-    implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
+//    implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
 
 
 }
@@ -46,7 +52,8 @@ publish {
     userOrg = 'mingliang'//bintray.com用户名
     groupId = 'com.cml'//jcenter上的路径
     artifactId = 'ijkplayerview'//项目名称
-    publishVersion = '1.0.4'//版本号
+    publishVersion = '1.0.6'//版本号
     desc = 'ijkplayerview'//描述，不重要
     website = 'https://github.com/cmlgithub/ijkplayerview'
 }
+//./gradlew clean build bintrayUpload -PbintrayUser=mingliang -PbintrayKey= -PdryRun=false

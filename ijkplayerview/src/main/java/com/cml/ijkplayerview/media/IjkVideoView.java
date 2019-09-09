@@ -166,6 +166,13 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         mCurrentState = MediaPlayerParams.STATE_IDLE;
         mTargetState = MediaPlayerParams.STATE_IDLE;
         _notifyMediaStatus();
+
+//        setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
     }
 
     /**
